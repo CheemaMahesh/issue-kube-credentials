@@ -1,16 +1,33 @@
 import { Request, Response } from "express";
+import { prisma } from "../prisma";
 
-export const issueController = async (req: Request, res: Response) => {
+export const issueCredential = async (req: Request, res: Response) => {
   try {
-    const { credentialId, name } = req.body;
-    const existisCredential = await Credential.findOne({
-      where: {
-        credentialId,
-      },
+    const { name, credentialId } = req.body;
+
+    if (!name || !credentialId) {
+      res.status(400).json({ message: "Name and credentialId are required" });
+      return;
+    }
+    const existingCredential = await prisma.credential.findUnique({
+      where: { credentialId },
     });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Internal server error" });
-    return;
+    if (existingCredential) {
+      res.status(400).json({ message: "Credential already exists" });
+      return;
+    }
+
+    const workerId = `worker-${Math.floor(Math.random() * 3) + 1}`;
+    const credential = await prisma.credential.create({
+      data: { name, credentialId, workerId },
+    });
+
+    res.status(201).json({
+      message: `Credential issued by ${workerId}`,
+      credential,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };

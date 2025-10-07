@@ -1,8 +1,8 @@
-import { Router, Response, Request } from "express";
-import { issueController } from "../controllers/issue.controller";
+import { Router } from "express";
+import { issueCredential } from "../controllers/issue.controller";
 
 const issueRouter = Router();
 
-issueRouter.post("/", issueController);
+issueRouter.post("/", issueCredential);
 
 export { issueRouter };
