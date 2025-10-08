@@ -13,7 +13,7 @@ export const issueCredential = async (req: Request, res: Response) => {
     // -----------------------------Validations
     const validated = issueValidation(name, credentialId);
     if (!validated.success) {
-      res.status(400).json({ message: validated.message });
+      res.status(400).json({ message: validated.messages });
       return;
     }
 
@@ -22,7 +22,7 @@ export const issueCredential = async (req: Request, res: Response) => {
       where: { credentialId, name },
     });
     if (existingCredential) {
-      res.status(400).json({ message: CREDENTIAL_ALREADY_EXISTS });
+      res.status(400).json({ message: [CREDENTIAL_ALREADY_EXISTS] });
       return;
     }
 
