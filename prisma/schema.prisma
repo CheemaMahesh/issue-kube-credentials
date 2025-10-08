@@ -9,7 +9,7 @@ datasource db {
 
 model Credential {
   id           String   @id @map("_id") @default(auto()) @db.ObjectId
-  credentialId String   @unique
+  credentialId String
   name         String
   workerId     String
   issuedAt     DateTime @default(now())

@@ -9,8 +9,8 @@ export const issueCredential = async (req: Request, res: Response) => {
       res.status(400).json({ message: "Name and credentialId are required" });
       return;
     }
-    const existingCredential = await prisma.credential.findUnique({
-      where: { credentialId },
+    const existingCredential = await prisma.credential.findFirst({
+      where: { credentialId, name },
     });
     if (existingCredential) {
       res.status(400).json({ message: "Credential already exists" });
